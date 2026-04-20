@@ -31,6 +31,12 @@ async function start() {
     db.run('INSERT INTO settings (key, value) VALUES (?, ?)', ['vapid_private', vapidPrivateKey]);
   }
 
+  // GitHub-Repo für Auto-Updater vorbelegen (falls noch nicht gesetzt)
+  const repoRow = db.get('SELECT value FROM settings WHERE key = ?', ['github_repo']);
+  if (!repoRow) {
+    db.run('INSERT INTO settings (key, value) VALUES (?, ?)', ['github_repo', 'Airartz/haushaltsbuch']);
+  }
+
   webpush.setVapidDetails(
     'mailto:admin@zuhause.fgdetailing.site',
     vapidPublicKey,
